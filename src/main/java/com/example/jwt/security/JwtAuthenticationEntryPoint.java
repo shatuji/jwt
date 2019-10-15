@@ -32,7 +32,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,
                          AuthenticationException e) throws IOException, ServletException {
-       // httpServletResponse.sendError(401 ,e.getMessage());
+
         httpServletResponse.getWriter().print("401");
         httpServletResponse.getWriter().write("333");
     }
