@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jwt.dao.RoleInfoMapper">
+	<resultMap type="com.example.jwt.entity.Role" id="JdRoleResultMap">
+		<id column="ID" property="id" />
+		<result column="ROLENAME" property="rolename"/>
+	</resultMap>
+	
+	<select id="selectAll"  resultMap="JdRoleResultMap">
+	select ID,ROLENAME from ROLEINFO
+	</select>
+	<select id="fetchRoleInfoById" parameterType="java.lang.Integer" resultMap="JdRoleResultMap">
+		SELECT ID,ROLENAME FROM ROLEINFO WHERE ID=#{id}
+	</select>
+	
+	<insert id="insertRole" parameterType="com.example.jwt.entity.Role" >
+	   INSERT INTO ROLEINFO(ID , ROLENAME) VALUES(#{id} ,#{rolename} )
+	</insert>
+	
+	<update id="updateRole" parameterType="com.example.jwt.entity.Role">
+		UPDATE ROLEINFO SET ROLENAME=#{rolename} WHERE ID=#{id}
+	</update>
+	
+	<select id="findModelPathByUserId" parameterType="java.lang.Integer"  resultType="java.lang.String">
+		 SELECT PB.PATH FROM
+			(SELECT RI.ID FROM USERINFO UI , ROLEINFO RI WHERE UI.ROLEID=RI.ID AND UI.ID=#{id , jdbcType=NUMERIC}) TEP INNER JOIN POWERSET PS
+ 				ON PS.TARGETID=TEP.ID AND PS.USERORROLE=0 INNER JOIN POWERBASE PB on PB.ID=PS.MODELID
+	</select>
+	
+	<delete id="deleteobj" parameterType="java.lang.Integer">
+		DELETE FROM ROLEINFO WHERE ID=#{id}
+	</delete>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jwt.dao.UserInfoMapper">
+	<resultMap type="com.example.jwt.entity.User" id="JdUserResultMap">
+	<id column="ID" property="id" />
+	<result column="ACCOUNT" property="account"/>
+	<result column="USERNAME" property="userName"/>
+	<result column="PASSWD" property="passwd"/>
+	<result column="UNITID" property="unitId"/>
+	<result column="PARTID" property="partId"/>
+	<result column="ROLEID" property="roleId"/>
+	<result column="TEL" property="tel"/>
+	<result column="USERPIC" property="userPic"/>
+	<result column="USERCODE" property="userCode"/>
+	<result column="STATUS" property="status"/>
+	<result column="LASTLOGINTIME" property="lastLoginTime"/>
+	<result column="LOGINTIMES" property="loginTimes"/>
+	<result column="ISROOT" property="isRoot"/>
+	<result column="POSTID" property="postId"/>
+	<result column="CREATETIME" property="createTime"/>
+</resultMap>
+
+	<resultMap type="com.example.jwt.entity.User" id="JdUserResultMapAndRoleSet">
+		<id column="ID" property="id" />
+		<result column="ACCOUNT" property="account"/>
+		<result column="USERNAME" property="userName"/>
+		<result column="PASSWD" property="passwd"/>
+		<result column="UNITID" property="unitId"/>
+		<result column="PARTID" property="partId"/>
+
+		<result column="TEL" property="tel"/>
+		<result column="USERPIC" property="userPic"/>
+		<result column="USERCODE" property="userCode"/>
+		<result column="STATUS" property="status"/>
+		<result column="LASTLOGINTIME" property="lastLoginTime"/>
+		<result column="LOGINTIMES" property="loginTimes"/>
+		<result column="ISROOT" property="isRoot"/>
+		<result column="POSTID" property="postId"/>
+		<result column="CREATETIME" property="createTime"/>
+
+		<collection property="roles" resultMap="JdRoleResultMap"></collection>
+	</resultMap>
+
+	<resultMap type="com.example.jwt.entity.Role" id="JdRoleResultMap">
+		<id column="ID" property="id" />
+		<result column="ROLENAME" property="rolename"/>
+	</resultMap>
+
+	<sql id="allColumns">
+		ID, ACCOUNT ,USERNAME,PASSWD,UNITID,ROLEID
+		,TEL,USERPIC,USERCODE,STATUS,LASTLOGINTIME,LOGINTIMES,POSTID,PARTID,CREATETIME,ISROOT
+	</sql>
+	<sql id="partOfColumns">
+		ID, ACCOUNT ,USERNAME,UNITID,PARTID,ROLEID
+		,USERPIC,USERCODE,STATUS,LASTLOGINTIME,LOGINTIMES,POSTID,CREATETIME
+	</sql>
+
+	
+	<select id="findJdUserByAccount" parameterType="java.lang.String"  resultMap="JdUserResultMapAndRoleSet">
+	     select * from USERINFO u left join ROLEINFO r on u.ROLEID=r.ID where u.ACCOUNT=#{account}
+	</select>
+
+	<select id="findEntityById" parameterType="java.lang.Integer" resultMap="JdUserResultMapAndRoleSet">
+		SELECT * FROM USERINFO u left join ROLEINFO r on u.ROLEID=r.ID WHERE u.ID=#{id}
+	</select>
+
+	<insert id="insertEntity" parameterType="com.example.jwt.entity.User">
+		INSERT INTO USERINFO(ACCOUNT ,USERNAME,PASSWD,STATUS,UNITID,ROLEID,POSTID,PARTID)
+		VALUES(#{account},#{userName},#{passwd},#{status},#{unitId},#{roleId},#{postId},#{partId})
+	</insert>
+</mapper>
